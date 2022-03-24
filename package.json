@@ -1,0 +1,28 @@
+{
+  "name": "hilmimehdi_6_23032022",
+  "version": "1.0.0",
+  "description": "Backend for \"Hot Takes\" App, created with NodeJs, Express, Mongoose. ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhihmi/HilmiMehdi_6_23032022.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "Express",
+    "Mongoose",
+    "MongoDB",
+    "bcrypt",
+    "jsonwebtoken",
+    "multer"
+  ],
+  "author": "Mehdi HILMI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mhihmi/HilmiMehdi_6_23032022/issues"
+  },
+  "homepage": "https://github.com/mhihmi/HilmiMehdi_6_23032022#readme"
+}
