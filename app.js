@@ -5,6 +5,7 @@ dotenv.config();
 
 // Import Routes
 const productsRoutes = require('./routes/products');
+const userRoutes = require('./routes/user');
 
 // MongoDB Link
 mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@hottakesdb.6lhhm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -28,7 +29,9 @@ app.use((req, res, next) => {
 // Middleware : intercept Post request Json & put it in req Object (req, in req.body)
 app.use(express.json());  // aka body-parser()
 
-// Use Routes of productRoutes for : /api/stuff
+// Use Routes of productRoutes for : /api/sauces
 app.use('/api/sauces', productsRoutes);
+//  Use Routes of userRoutes for : /api/auth
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
