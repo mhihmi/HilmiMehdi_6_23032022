@@ -16,7 +16,9 @@ You will need to have Node and `npm` installed locally on your machine.
 ### Back end Installation
 
 - Clone this repo, run `npm install` from within the project directory. 
-- You can then run the server with `node server`. 
+- You can then run the server with `npm start`.
+- You can also run it with server refresh using `nodemon server`. (use `npm install -g nodemon` before).
+  
 The server should run on `localhost` with default port `3000`. If the server runs on another port for any reason, this is printed to the console when the server starts, e.g. `Listening on port 3001`.
 
 ### Front end Repository

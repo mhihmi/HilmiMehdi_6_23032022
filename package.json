@@ -4,7 +4,7 @@
   "description": "Backend for \"Hot Takes\" App, created with NodeJs, Express, Mongoose. ",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,14 @@
   "bugs": {
     "url": "https://github.com/mhihmi/HilmiMehdi_6_23032022/issues"
   },
-  "homepage": "https://github.com/mhihmi/HilmiMehdi_6_23032022#readme"
+  "homepage": "https://github.com/mhihmi/HilmiMehdi_6_23032022#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.8",
+    "mongoose-unique-validator": "^3.0.0",
+    "multer": "^1.4.4"
+  }
 }
