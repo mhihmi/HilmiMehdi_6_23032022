@@ -18,6 +18,7 @@ You will need to have Node and `npm` installed locally on your machine.
 - Clone this repo, run `npm install` from within the project directory. 
 - You can then run the server with `npm start`.
 - You can also run it with server refresh using `nodemon server`. (use `npm install -g nodemon` before).
+- Add MongoDB and Auth Key token in a .env file in root folder.
   
 The server should run on `localhost` with default port `3000`. If the server runs on another port for any reason, this is printed to the console when the server starts, e.g. `Listening on port 3001`.
 

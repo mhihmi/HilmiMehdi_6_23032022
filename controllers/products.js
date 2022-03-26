@@ -83,11 +83,13 @@ exports.rateSauce = (req, res, next) => {
                 case -1: // if user dislike
                     sauce.usersDisliked.push(req.token.userId);
                     break;
-                case 0: // cancel like/dislike
+                case 0: // No like/dislike
                     if (sauce.usersLiked.includes(req.token.userId)) {
-                        sauce.usersLiked.splice(req.token.userId, 1);
-                    } else {
-                        sauce.usersDisliked.splice(req.token.userId, 1);
+                        const index = sauce.usersLiked.indexOf(req.token.userId);
+                        sauce.usersLiked.splice(index, 1);
+                    } else if (sauce.usersDisliked.includes(req.token.userId)) {
+                        const index = sauce.usersDisliked.indexOf(req.token.userId);
+                        sauce.usersDisliked.splice(index, 1);
                     }
                     break;
             }
