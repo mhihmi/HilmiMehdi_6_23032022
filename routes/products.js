@@ -20,4 +20,6 @@ router.get('/:id', auth, productCtrl.getOneSauce);
 
 router.get('/', auth, productCtrl.getAllSauces);
 
+router.post('/:id/like', auth, productCtrl.rateSauce);
+
 module.exports = router;

@@ -72,3 +72,29 @@ exports.getAllSauces = (req, res, next) => {
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
 };
+
+exports.rateSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            switch (req.body.like) {
+                case 1: // if user like
+                    sauce.usersLiked.push(req.token.userId);
+                    break;
+                case -1: // if user dislike
+                    sauce.usersDisliked.push(req.token.userId);
+                    break;
+                case 0: // cancel like/dislike
+                    if (sauce.usersLiked.includes(req.token.userId)) {
+                        sauce.usersLiked.splice(req.token.userId, 1);
+                    } else {
+                        sauce.usersDisliked.splice(req.token.userId, 1);
+                    }
+                    break;
+            }
+            // update sauce with total like/dislikes
+            Sauce.updateOne({ _id: req.params.id }, { likes: sauce.usersLiked.length, dislikes: sauce.usersDisliked.length, _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Sauce rated successfully!' }))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
+};
