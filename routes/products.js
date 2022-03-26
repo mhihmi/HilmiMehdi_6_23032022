@@ -3,17 +3,21 @@ const router = express.Router();
 
 // Import Controller
 const productCtrl = require('../controllers/products');
+// Import Auth Middleware
+const auth = require('../middleware/auth');
+// Import Multer for files upload
+const multer = require('../middleware/multer-config');
 
 // Middlewares CRUD 
 
-router.post('/', productCtrl.createSauce);
+router.post('/', auth, multer, productCtrl.createSauce);
 
-router.put('/:id', productCtrl.modifySauce);
+router.put('/:id', auth, multer, productCtrl.modifySauce);
 
-router.delete('/:id', productCtrl.deleteSauce);
+router.delete('/:id', auth, productCtrl.deleteSauce);
 
-router.get('/:id', productCtrl.getOneSauce);
+router.get('/:id', auth, productCtrl.getOneSauce);
 
-router.get('/', productCtrl.getAllSauces);
+router.get('/', auth, productCtrl.getAllSauces);
 
 module.exports = router;

@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require("dotenv");
 dotenv.config();
-
+// Import Path of File System
+const path = require('path');
 // Import Routes
 const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
@@ -28,6 +29,9 @@ app.use((req, res, next) => {
 
 // Middleware : intercept Post request Json & put it in req Object (req, in req.body)
 app.use(express.json());  // aka body-parser()
+
+// Multer => Serv Images folder on request for : /images 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Use Routes of productRoutes for : /api/sauces
 app.use('/api/sauces', productsRoutes);
