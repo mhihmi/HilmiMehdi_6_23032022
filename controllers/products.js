@@ -1,6 +1,6 @@
 // Sauce Model Import
 const Sauce = require('../models/Sauces');
-// Import fs package de Node => file system
+// Import Node fs package => file system
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
@@ -20,8 +20,8 @@ exports.modifySauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
             if (sauce.userId !== req.token.userId) { // Compare UserId de la bdd et celui du token (cf.req précédente)
-                return res.status(401).json({
-                    error: new Error('Requête non autorisée !')
+                return res.status(403).json({
+                    error: new Error('Unauthorized Request !')
                 })
             }
             const sauceObject = req.file ? // multer, is any file/img added ?
@@ -29,6 +29,7 @@ exports.modifySauce = (req, res, next) => {
                     ...JSON.parse(req.body.sauce),
                     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                 } : { ...req.body };
+
             Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce updated successfully!' }))
                 .catch(error => res.status(400).json({ error }));
@@ -45,12 +46,12 @@ exports.deleteSauce = (req, res, next) => {
                 });
             }
             if (sauce.userId !== req.token.userId) { // If DB UserId & token userId (cf. auth.js) different 
-                return res.status(401).json({
-                    error: new Error('Request forbidden !')
+                return res.status(403).json({
+                    error: new Error('Unauthorized Request !')
                 })
             }
             // if DB UserId & token userId are the same, we can delete it
-            const filename = sauce.imageUrl.split('/images/')[1];
+            const filename = sauce.imageUrl.split('/images/')[1]; // Extract filename after images in path
             fs.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({ _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'Sauce Deleted !' }))
