@@ -91,7 +91,7 @@ exports.rateSauce = (req, res, next) => {
                     }
                     break;
             }
-            // update sauce with total like/dislikes
+            // Update sauce with total like/dislikes
             Sauce.updateOne({ _id: req.params.id }, { likes: sauce.usersLiked.length, dislikes: sauce.usersDisliked.length, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce rated successfully!' }))
                 .catch(error => res.status(400).json({ error }));
