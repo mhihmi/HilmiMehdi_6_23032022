@@ -78,23 +78,26 @@ exports.rateSauce = (req, res, next) => {
         .then(sauce => {
             switch (req.body.like) {
                 case 1: // if user like
+                    sauce.likes++;
                     sauce.usersLiked.push(req.token.userId);
                     break;
                 case -1: // if user dislike
+                    sauce.dislikes++;
                     sauce.usersDisliked.push(req.token.userId);
                     break;
                 case 0: // No like/dislike
                     if (sauce.usersLiked.includes(req.token.userId)) {
-                        const index = sauce.usersLiked.indexOf(req.token.userId);
-                        sauce.usersLiked.splice(index, 1);
+                        sauce.usersLiked = sauce.usersLiked.filter(userId => userId !== req.token.userId);
+                        sauce.likes--;
                     } else if (sauce.usersDisliked.includes(req.token.userId)) {
-                        const index = sauce.usersDisliked.indexOf(req.token.userId);
-                        sauce.usersDisliked.splice(index, 1);
+                        sauce.usersDisliked = sauce.usersDisliked.filter(userId => userId !== req.token.userId);
+                        sauce.dislikes--;
                     }
                     break;
             }
             // Update sauce with total like/dislikes
-            Sauce.updateOne({ _id: req.params.id }, { likes: sauce.usersLiked.length, dislikes: sauce.usersDisliked.length, _id: req.params.id })
+            sauce.save()
+                // Sauce.updateOne({ _id: req.params.id }, { likes: sauce.usersLiked.length, dislikes: sauce.usersDisliked.length, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce rated successfully!' }))
                 .catch(error => res.status(400).json({ error }));
         })
