@@ -23,7 +23,14 @@ exports.modifySauce = (req, res, next) => {
                 return res.status(403).json({
                     error: new Error('Unauthorized Request !')
                 })
-            }
+            };
+
+            const filename = sauce.imageUrl.split('/images/')[1];
+            if (req.file) {
+                fs.unlink(`images/${filename}`, () => { // Delete Old image if file in req
+                });
+            };
+
             const sauceObject = req.file ? // multer, is any file/img added ?
                 {
                     ...JSON.parse(req.body.sauce),
