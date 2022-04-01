@@ -27,8 +27,7 @@ exports.modifySauce = (req, res, next) => {
 
             const filename = sauce.imageUrl.split('/images/')[1];
             if (req.file) {
-                fs.unlink(`images/${filename}`, () => { // Delete Old image if file in req
-                });
+                fs.unlink(`images/${filename}`, () => { }); // Delete Old image if file in req
             };
 
             const sauceObject = req.file ? // multer, is any file/img added ?
