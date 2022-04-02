@@ -1,13 +1,19 @@
-const bcrypt = require('bcrypt');  // crypt psw
+const bcrypt = require('bcrypt');  // hash psw
 const jwt = require('jsonwebtoken'); // secure data
+const cryptojs = require('crypto-js'); // encrypt mail
+
+const dotenv = require("dotenv");
+dotenv.config();
 
 const User = require('../models/User');
 
 exports.signup = (req, res, next) => {
+    const emailCryptoJs = cryptojs.HmacSHA256(req.body.email, process.env.MAIL_CRYPTO_KEY).toString();
+
     bcrypt.hash(req.body.password, 10) // hash request psw, salt hash number - method async
         .then(hash => {
             const user = new User({ // get hashed psw & save it in User Model instance for Database
-                email: req.body.email,
+                email: emailCryptoJs,
                 password: hash
             });
             user.save() // save new user in Database
