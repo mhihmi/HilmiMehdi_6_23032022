@@ -9,7 +9,7 @@ const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
 
 // MongoDB Link
-mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@hottakesdb.6lhhm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
