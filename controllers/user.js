@@ -40,7 +40,7 @@ exports.login = (req, res, next) => {
                         userId: user._id, // userId in DB
                         token: jwt.sign( // Encode token with jsw method sign()
                             { userId: user._id }, // Check userId Request - Payload
-                            process.env.RANDOM_TOKEN_SECRET, // Encode secret key - Salt
+                            process.env.JWT_KEY, // Encode secret key - Salt
                             { expiresIn: '24h' }
                         )
                     });
