@@ -2,8 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require("dotenv");
 dotenv.config();
-// Import Path of File System
+// Import File System Path 
 const path = require('path');
+// Import Logger
+const morgan = require('morgan');
 // Import Routes
 const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
@@ -18,6 +20,8 @@ mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${pr
     .catch(() => console.log('MongoDB connection failed !'));
 
 const app = express();
+
+app.use(morgan('dev'));
 
 // Middleware for CORS security
 app.use((req, res, next) => {
