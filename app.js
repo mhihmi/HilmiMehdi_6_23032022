@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
 
+mongoose.set('debug', true);  // Mongoose debugger
 // MongoDB Link
 mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     {

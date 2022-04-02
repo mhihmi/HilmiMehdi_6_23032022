@@ -6,6 +6,6 @@ module.exports = (req, res, next) => {
         next();
     } else {
         return res.status(400)
-            .json({ error: `Password not strong enough : ${passwordSchema.validate('req.body.password', { list: true })}` })
+            .json({ error: `Password not strong enough : ${passwordSchema.validate('req.body.password', { list: true })}, 5 - 15 letters with 2 digits, 1 uppercase & lowercase letters` })
     }
 };

@@ -24,7 +24,9 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email }) // Find User in DB with email sent in request
+    const emailCryptoJs = cryptojs.HmacSHA256(req.body.email, process.env.MAIL_CRYPTO_KEY).toString();
+
+    User.findOne({ email: emailCryptoJs }) // Find User in DB with email sent in request, after encrypt
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'User not found !' }); // 401 => Unauthorized
