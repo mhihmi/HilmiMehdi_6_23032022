@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 // Import File System Path 
 const path = require('path');
+// Import Helmet for headers security
+const helmet = require("helmet");
 // Import Logger
 const morgan = require('morgan');
 // Import Routes
@@ -22,6 +24,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${pr
 
 const app = express();
 
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan('dev'));
 
 // Middleware for CORS security
