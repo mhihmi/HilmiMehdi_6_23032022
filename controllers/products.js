@@ -30,11 +30,17 @@ exports.modifySauce = (req, res, next) => {
                 fs.unlink(`images/${filename}`, () => { }); // Delete Old image if file in req
             };
 
+            const parsedSauce = JSON.parse(req.body.sauce);
             const sauceObject = req.file ? // multer, is any file/img added ?
                 {
-                    ...JSON.parse(req.body.sauce),
+                    userId: req.token.userId,
+                    name: parsedSauce.name,
+                    manufacturer: parsedSauce.manufacturer,
+                    description: parsedSauce.description,
+                    mainPepper: parsedSauce.mainPepper,
+                    heat: parsedSauce.heat,
                     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-                } : { ...req.body };
+                } : { ...req.body, userId: req.token.userId };
 
             Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce updated successfully!' }))
