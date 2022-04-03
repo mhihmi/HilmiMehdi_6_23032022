@@ -40,7 +40,15 @@ exports.modifySauce = (req, res, next) => {
                     mainPepper: parsedSauce.mainPepper,
                     heat: parsedSauce.heat,
                     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-                } : { ...req.body, userId: req.token.userId };
+                } :
+                {
+                    userId: req.token.userId,
+                    name: parsedSauce.name,
+                    manufacturer: parsedSauce.manufacturer,
+                    description: parsedSauce.description,
+                    mainPepper: parsedSauce.mainPepper,
+                    heat: parsedSauce.heat
+                };
 
             Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce updated successfully!' }))
