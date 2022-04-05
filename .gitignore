@@ -41,6 +41,10 @@ build/Release
 .vscode
 .env
 
+# Images/Assets
+images
+!images/Readme
+
 # Dependency directories
 node_modules/
 jspm_packages/
