@@ -5,10 +5,13 @@ const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce); // multer format changed req => extract Json Object from sauce
-    delete sauceObject._id; // delete id key from body
     const sauce = new Sauce({
-        ...sauceObject,
         userId: req.token.userId, // get token userId  
+        name: sauceObject.name,
+        manufacturer: sauceObject.manufacturer,
+        description: sauceObject.description,
+        mainPepper: sauceObject.mainPepper,
+        heat: sauceObject.heat,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // generate dynamic imgUrl
     });
     sauce.save()
