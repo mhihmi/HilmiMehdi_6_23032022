@@ -6,11 +6,23 @@ dotenv.config();
 const path = require('path');
 // Import Helmet for headers security
 const helmet = require("helmet");
+// Import mongo-sanitize to protect from injections
+const mongoSanitize = require('express-mongo-sanitize');
+// Import express-rate-limit to protect from force brute attacks
+const rateLimit = require('express-rate-limit');
 // Import Logger
 const morgan = require('morgan');
 // Import Routes
 const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
+
+// Setup rate-limit
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 mongoose.set('debug', true);  // Mongoose debugger
 // MongoDB Link
@@ -24,7 +36,12 @@ mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${pr
 
 const app = express();
 
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+// Security plugin call
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // Middleware to secure HTTP Headers
+app.disable('x-powered-by'); // Disable headers 'x-powered-by'
+app.use(mongoSanitize()); // Global Middleware to protect from Injections
+app.use(limiter); // Middleware to protect from brute force attacks
+
 app.use(morgan('dev'));
 
 // Middleware for CORS security
