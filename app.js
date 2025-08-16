@@ -7,7 +7,7 @@ const path = require('path');
 // Import Helmet for headers security
 const helmet = require("helmet");
 // Import mongo-sanitize to protect from injections
-const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require('./middleware/mongo-sanitize');
 // Import express-rate-limit to protect from force brute attacks
 const rateLimit = require('express-rate-limit');
 // Import Logger
@@ -26,11 +26,7 @@ const limiter = rateLimit({
 
 mongoose.set('debug', true);  // Mongoose debugger
 // MongoDB Link
-mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority&appName=${process.env.APP_NAME}`,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
+mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority&appName=${process.env.APP_NAME}`)
     .then(() => console.log('MongoDB connection succeed !'))
     .catch(() => console.log('MongoDB connection failed !'));
 
