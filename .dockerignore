@@ -1,0 +1,34 @@
+# Dépendances
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers de développement
+.env.local
+.env.development
+.env.test
+.env.production.local
+
+# Fichiers Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Fichiers IDE
+.vscode
+.idea
+
+# Fichiers temporaires
+*.tmp
+*.log
+
+# Images uploadées (optionnel selon vos besoins)
+images/*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
