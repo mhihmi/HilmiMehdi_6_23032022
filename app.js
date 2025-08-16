@@ -19,14 +19,24 @@ const userRoutes = require('./routes/user');
 // Setup rate-limit
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    max: 30, // Limit each IP to 30 requests per `window` (here, per 15 minutes)
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
 mongoose.set('debug', true);  // Mongoose debugger
-// MongoDB Link
-mongoose.connect(`mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority&appName=${process.env.APP_NAME}`)
+// MongoDB Link - Compatible Atlas et local
+let mongoConnection;
+
+if (process.env.NODE_ENV === 'production' && process.env.MONGODB_URI) {
+    // Utiliser MONGODB_URI directement pour MongoDB local
+    mongoConnection = process.env.MONGODB_URI;
+} else {
+    // Format Atlas avec les variables séparées
+    mongoConnection = `mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority&appName=${process.env.APP_NAME}`;
+}
+
+mongoose.connect(mongoConnection)
     .then(() => console.log('MongoDB connection succeed !'))
     .catch((error) => {
         console.log('MongoDB connection failed !');
