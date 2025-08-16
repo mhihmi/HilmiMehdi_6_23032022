@@ -7,7 +7,7 @@ const path = require('path');
 // Import Helmet for headers security
 const helmet = require("helmet");
 // Import mongo-sanitize to protect from injections
-const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require('./middleware/mongo-sanitize');
 // Import express-rate-limit to protect from force brute attacks
 const rateLimit = require('express-rate-limit');
 // Import Logger
