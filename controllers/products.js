@@ -34,7 +34,7 @@ exports.createSauce = (req, res, next) => {
         description: sauceObject.description,
         mainPepper: sauceObject.mainPepper,
         heat: sauceObject.heat,
-        imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : '' // generate dynamic imgUrl only if file exists
+        imageUrl: req.file ? `${process.env.FRONTEND_URL}/images/${req.file.filename}` : '' // generate dynamic imgUrl only if file exists
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce saved successfully!' }))
@@ -64,7 +64,7 @@ exports.modifySauce = (req, res, next) => {
                     description: parsedSauce.description,
                     mainPepper: parsedSauce.mainPepper,
                     heat: parsedSauce.heat,
-                    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    imageUrl: `${process.env.FRONTEND_URL}/images/${req.file.filename}`
                 } :
                 {
                     userId: req.token.userId,
