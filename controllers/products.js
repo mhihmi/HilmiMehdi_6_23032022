@@ -4,7 +4,29 @@ const Sauce = require('../models/Sauces');
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.sauce); // multer format changed req => extract Json Object from sauce
+    let sauceObject;
+
+    try {
+        // multipart/form-data
+        if (req.body.sauce) {
+            sauceObject = JSON.parse(req.body.sauce);
+        }
+        // Direct JSON
+        else if (req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
+            sauceObject = req.body;
+        }
+        // None of them
+        else {
+            return res.status(400).json({
+                error: 'Invalid request format. Send either JSON or multipart form-data with sauce field.'
+            });
+        }
+    } catch (parseError) {
+        return res.status(400).json({
+            error: 'Invalid JSON in sauce field: ' + parseError.message
+        });
+    }
+
     const sauce = new Sauce({
         userId: req.token.userId, // get token userId  
         name: sauceObject.name,
@@ -12,7 +34,7 @@ exports.createSauce = (req, res, next) => {
         description: sauceObject.description,
         mainPepper: sauceObject.mainPepper,
         heat: sauceObject.heat,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // generate dynamic imgUrl
+        imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : '' // generate dynamic imgUrl only if file exists
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce saved successfully!' }))
