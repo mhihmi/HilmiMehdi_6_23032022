@@ -17,22 +17,39 @@ const productsRoutes = require('./routes/products');
 const userRoutes = require('./routes/user');
 
 // Setup rate-limit
+const isProduction = process.env.NODE_ENV === 'production';
+console.log(`Environment: ${process.env.NODE_ENV || 'undefined'} (Production: ${isProduction})`);
+
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 30, // Limit each IP to 30 requests per `window` (here, per 15 minutes)
+    max: isProduction ? 100 : 1000, // Production: 100 req/15min, Dev: 1000 req/15min
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: {
+        error: 'Trop de requêtes depuis cette IP, réessayez dans 15 minutes.'
+    }
+});
+
+// Rate limiting spécifique pour l'authentification
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: isProduction ? 5 : 50, // Production: 5 login attempts, Dev: 50
+    message: {
+        error: 'Trop de tentatives de connexion, réessayez dans 15 minutes.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 
 mongoose.set('debug', true);  // Mongoose debugger
 // MongoDB Link - Compatible Atlas et local
 let mongoConnection;
 
-if (process.env.NODE_ENV === 'production' && process.env.MONGODB_URI) {
-    // Utiliser MONGODB_URI directement pour MongoDB local
+if (isProduction && process.env.MONGODB_URI) {
+    // Utiliser MONGODB_URI directement pour MongoDB local en production
     mongoConnection = process.env.MONGODB_URI;
 } else {
-    // Format Atlas avec les variables séparées
+    // Format Atlas avec les variables séparées (développement par défaut)
     mongoConnection = `mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASS}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority&appName=${process.env.APP_NAME}`;
 }
 
@@ -69,7 +86,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Use Routes of productRoutes for : /api/sauces
 app.use('/api/sauces', productsRoutes);
-//  Use Routes of userRoutes for : /api/auth
-app.use('/api/auth', userRoutes);
+//  Use Routes of userRoutes for : /api/auth (with specific auth rate limiting)
+app.use('/api/auth', authLimiter, userRoutes);
 
 module.exports = app;
